@@ -1,6 +1,6 @@
 {
-  "name": "tce-manifest",
-  "description": "Tailor CMS carousel element",
+  "name": "@tailor-cms/ce-carousel-manifest",
+  "description": "Tailor CMS carousel manifest",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
   "version": "0.0.1",
@@ -42,5 +42,8 @@
     "minify": false,
     "clean": false,
     "dts": true
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="tce-container">
+  <div class="tce-carousel">
     <div>This is Edit version of the content element id: {{ element?.id }}</div>
     <div class="mt-6 mb-2">
       Counter:
@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
 import { defineEmits, defineProps } from 'vue';
-import { Element } from 'tce-manifest';
+import { Element } from '@tailor-cms/ce-carousel-manifest';
 
 const emit = defineEmits(['save']);
 const props = defineProps<{ element: Element; isFocused: boolean }>();
@@ -24,7 +24,7 @@ const increment = () => {
 </script>
 
 <style scoped>
-.tce-container {
+.tce-carousel {
   background-color: transparent;
   margin-top: 1rem;
   padding: 1.5rem;
