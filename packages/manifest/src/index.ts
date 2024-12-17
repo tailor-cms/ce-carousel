@@ -5,15 +5,18 @@ import type {
 } from './interfaces';
 
 // Element unique id within the target system (e.g. Tailor)
-export const type = 'ORG_CUSTOM_ELEMENT';
+export const type = 'CE_CAROUSEL';
 
 // Display name (e.g. shown to the author)
-export const name = 'Custom element';
+export const name = 'Carousel';
 
 // Function which inits element state (data property on the Content Element
 // entity)
 // e.g. for simple counter component:
-export const initState: DataInitializer = (): ElementData => ({ count: 0 });
+export const initState: DataInitializer = (): ElementData => ({
+  embeds: {},
+  items: [],
+});
 
 // Can be loaded from package.json
 export const version = '1.0';
@@ -27,21 +30,14 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const mocks = {
-  displayContexts: [
-    { name: 'Test preset 1', data: { state: 'I have a value' } },
-    { name: 'Test preset 2', data: { state: 'I have a different value' } },
-  ],
-};
-
 const manifest: ElementManifest = {
   type,
   version: '1.0',
   name,
+  isComposite: true,
   ssr: false,
   initState,
   ui,
-  mocks,
 };
 
 export default manifest;
