@@ -1,5 +1,5 @@
 <template>
-  <VCarouselItem class="carousel-item text-center">
+  <VCarouselItem :value="item.id" class="carousel-item text-center">
     <VAlert
       v-if="!hasElements"
       class="mx-8 my-3"

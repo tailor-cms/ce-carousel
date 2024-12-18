@@ -39,7 +39,9 @@ import manifest, {
 import cloneDeep from 'lodash/cloneDeep';
 import { createId as cuid } from '@paralleldrive/cuid2';
 import { ElementPlaceholder } from '@tailor-cms/core-components';
+import last from 'lodash/last';
 import pick from 'lodash/pick';
+import remove from 'lodash/remove';
 
 import CarouselItem from './CarouselItem.vue';
 
@@ -53,7 +55,7 @@ const emit = defineEmits(['save']);
 
 const elementBus: any = inject('$elementBus');
 
-const activeItem = ref(0);
+const activeItem = ref<string>();
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
 const embedsByItem = computed(() =>
@@ -72,13 +74,16 @@ const saveItem = ({ item, embeds = {} }: any, index: number) => {
 elementBus.on('add', () => {
   const id = cuid();
   elementData.items.push({ id, elementIds: [] });
+  activeItem.value = id;
   emit('save', elementData);
 });
 
 elementBus.on('delete', () => {
-  const { elementIds } = elementData.items[activeItem.value];
-  elementIds.forEach((id) => delete elementData.embeds[id]);
-  elementData.items.splice(activeItem.value, 1);
+  const item = elementData.items.find((it) => it.id === activeItem.value);
+  if (!item) return;
+  item.elementIds.forEach((id) => delete elementData.embeds[id]);
+  remove(elementData.items, (it) => it.id === activeItem.value);
+  activeItem.value = last(elementData.items)?.id;
   emit('save', elementData);
 });
 
