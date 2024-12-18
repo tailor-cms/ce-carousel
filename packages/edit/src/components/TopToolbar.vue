@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import type { Element } from '@tailor-cms/ce-carousel-manifest';
 
@@ -61,8 +61,8 @@ watch(
 
 const deleteItem = () => {
   return eventBus.channel('app').emit('showConfirmationModal', {
-    title: 'Delete carousel item',
-    message: 'Are you sure you want to delete selected item?',
+    title: 'Delete slide',
+    message: 'Are you sure you want to delete current slide?',
     action: () => elementBus.emit('delete'),
   });
 };
