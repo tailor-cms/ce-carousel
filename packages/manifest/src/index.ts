@@ -15,6 +15,7 @@ export const name = 'Carousel';
 export const initState: DataInitializer = (): ElementData => ({
   embeds: {},
   items: [],
+  height: 500,
 });
 
 // Can be loaded from package.json

@@ -1,5 +1,5 @@
 <template>
-  <VCard class="tce-carousel" color="grey-lighten-5">
+  <div class="tce-carousel">
     <ElementPlaceholder
       v-if="!elementData.items.length"
       :icon="manifest.ui.icon"
@@ -9,19 +9,25 @@
       active-icon="mdi-arrow-up"
       active-placeholder="Use toolbar to add the first slide to the carousel"
     />
-    <VCarousel v-else v-model="activeItem" :show-arrows="false">
-      <CarouselItem
-        v-for="(item, index) in elementData.items"
-        :key="item.id"
-        :embed-types="embedTypes"
-        :embeds="embedsByItem[item.id]"
-        :is-disabled="isDisabled"
-        :is-focused="isFocused"
-        :item="item"
-        @save="saveItem($event, index)"
-      />
-    </VCarousel>
-  </VCard>
+    <VCard v-else class="tce-carousel" color="grey-lighten-5">
+      <VCarousel
+        v-model="activeItem"
+        :height="elementData.height"
+        :show-arrows="false"
+      >
+        <CarouselItem
+          v-for="(item, index) in elementData.items"
+          :key="item.id"
+          :embed-types="embedTypes"
+          :embeds="embedsByItem[item.id]"
+          :is-disabled="isDisabled"
+          :is-focused="isFocused"
+          :item="item"
+          @save="saveItem($event, index)"
+        />
+      </VCarousel>
+    </VCard>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -75,10 +81,15 @@ elementBus.on('delete', () => {
   elementData.items.splice(activeItem.value, 1);
   emit('save', elementData);
 });
+
+elementBus.on('height', (height: number) => {
+  elementData.height = height;
+  emit('save', elementData);
+});
 </script>
 
 <style lang="scss" scoped>
-.tce-accordion {
+.tce-carousel {
   text-align: left;
   margin: 1rem 0;
 }

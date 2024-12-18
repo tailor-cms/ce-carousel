@@ -6,6 +6,7 @@ interface CarouselItem {
 export interface ElementData {
   embeds: Record<string, any>;
   items: CarouselItem[];
+  height: number;
 }
 
 export interface Element {

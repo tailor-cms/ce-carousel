@@ -1,7 +1,8 @@
 <template>
-  <VCarouselItem class="text-center">
+  <VCarouselItem class="carousel-item text-center">
     <VAlert
       v-if="!hasElements"
+      class="mx-8 my-3"
       color="primary-darken-2"
       icon="mdi-information-variant"
       variant="tonal"
@@ -18,6 +19,7 @@
       :container="{ embeds }"
       :is-disabled="isDisabled"
       :types="embedTypes"
+      class="px-8 py-3"
       @delete="deleteEmbed"
       @save="saveEmbed($event.embeds)"
     />
@@ -65,27 +67,8 @@ const deleteEmbed = (embed: { id: string }) => {
 </script>
 
 <style lang="scss" scoped>
-.accordion-title {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.009375em;
-}
-
-.v-input {
-  position: relative;
-
-  :deep(.v-input__details) {
-    position: absolute;
-    padding: 0 !important;
-    z-index: 9;
-
-    .v-messages__message {
-      margin-top: 0.25rem;
-      border-radius: 4px;
-      padding: 0.5rem 0.75rem;
-      background: #424242;
-      color: #fff !important;
-    }
-  }
+.carousel-item :deep(.v-responsive__content) {
+  padding-bottom: 2rem;
+  overflow-y: auto;
 }
 </style>
