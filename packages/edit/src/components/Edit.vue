@@ -9,24 +9,32 @@
       active-icon="mdi-arrow-up"
       active-placeholder="Use toolbar to add the first slide to the carousel"
     />
-    <VCard v-else class="tce-carousel" color="grey-lighten-5">
-      <VCarousel
-        v-model="activeItem"
-        :height="elementData.height"
-        :show-arrows="false"
-      >
+    <Draggable
+      v-model="elementData.items"
+      :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
+      :disabled="isDisabled"
+      animation="150"
+      handle=".drag-handle"
+      item-key="id"
+      @end="dragElementIndex = -1"
+      @start="dragElementIndex = $event.oldIndex"
+      @update:model-value="emit('save', elementData)"
+    >
+      <template #item="{ element: item, index }">
         <CarouselItem
-          v-for="(item, index) in elementData.items"
-          :key="item.id"
           :embed-types="embedTypes"
           :embeds="embedsByItem[item.id]"
+          :height="elementData.height"
           :is-disabled="isDisabled"
           :is-focused="isFocused"
           :item="item"
+          :position="index + 1"
+          class="overflow-y-auto"
+          @delete="deleteItem(index)"
           @save="saveItem($event, index)"
         />
-      </VCarousel>
-    </VCard>
+      </template>
+    </Draggable>
   </div>
 </template>
 
@@ -38,10 +46,9 @@ import manifest, {
 } from '@tailor-cms/ce-carousel-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import { createId as cuid } from '@paralleldrive/cuid2';
+import Draggable from 'vuedraggable/src/vuedraggable';
 import { ElementPlaceholder } from '@tailor-cms/core-components';
-import last from 'lodash/last';
 import pick from 'lodash/pick';
-import remove from 'lodash/remove';
 
 import CarouselItem from './CarouselItem.vue';
 
@@ -55,7 +62,7 @@ const emit = defineEmits(['save']);
 
 const elementBus: any = inject('$elementBus');
 
-const activeItem = ref<string>();
+const dragElementIndex = ref<number>(-1);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
 const embedsByItem = computed(() =>
@@ -71,19 +78,16 @@ const saveItem = ({ item, embeds = {} }: any, index: number) => {
   emit('save', elementData);
 };
 
+const deleteItem = (index: number) => {
+  const { elementIds } = elementData.items[index];
+  elementIds.forEach((id) => delete elementData.embeds[id]);
+  elementData.items.splice(index, 1);
+  emit('save', elementData);
+};
+
 elementBus.on('add', () => {
   const id = cuid();
   elementData.items.push({ id, elementIds: [] });
-  activeItem.value = id;
-  emit('save', elementData);
-});
-
-elementBus.on('delete', () => {
-  const item = elementData.items.find((it) => it.id === activeItem.value);
-  if (!item) return;
-  item.elementIds.forEach((id) => delete elementData.embeds[id]);
-  remove(elementData.items, (it) => it.id === activeItem.value);
-  activeItem.value = last(elementData.items)?.id;
   emit('save', elementData);
 });
 
@@ -97,5 +101,17 @@ elementBus.on('height', (height: number) => {
 .tce-carousel {
   text-align: left;
   margin: 1rem 0;
+}
+
+:deep(.sortable-ghost) {
+  box-shadow: none !important;
+
+  > * {
+    visibility: hidden;
+  }
+}
+
+.drag-handle {
+  cursor: pointer;
 }
 </style>

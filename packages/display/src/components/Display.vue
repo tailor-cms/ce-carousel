@@ -1,6 +1,6 @@
 <template>
   <VCard class="tce-root">
-    <VCarousel :height="data.height" :show-arrows="false">
+    <VCarousel :key="carouselKey" :height="data.height" :show-arrows="false">
       <VCarouselItem v-for="item in data.items" :key="item.id">
         <div class="pa-4">
           <VAlert v-if="!embeds[item.id].length" type="info" variant="tonal">
@@ -16,10 +16,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { ElementData } from '@tailor-cms/ce-carousel-manifest';
+import map from 'lodash/map';
 import sortBy from 'lodash/sortBy';
 
 const props = defineProps<{ data: ElementData; userState: any }>();
 defineEmits(['interaction']);
+
+const carouselKey = computed(() => map(props.data.items, 'id').join(', '));
 
 const embeds = computed(() => {
   const { items, embeds } = props.data;

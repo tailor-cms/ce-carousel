@@ -9,14 +9,6 @@
       >
         Add slide
       </VBtn>
-      <VBtn
-        color="primary-darken-4"
-        prepend-icon="mdi-minus"
-        variant="text"
-        @click="deleteItem"
-      >
-        Remove current slide
-      </VBtn>
       <VTextField
         v-model="height"
         :rules="[
@@ -24,7 +16,7 @@
           (v: number) => v >= 200 || 'Height must be at least 200px',
           (v: number) => v <= 3000 || 'Height must be at most 3000px',
         ]"
-        class="required ml-5"
+        class="required ml-2"
         hide-details="auto"
         label="Height"
         min-width="200"
@@ -45,7 +37,6 @@ import type { Element } from '@tailor-cms/ce-carousel-manifest';
 const props = defineProps<{ element: Element }>();
 
 const elementBus: any = inject('$elementBus');
-const eventBus = inject('$eventBus') as any;
 
 const form = ref<HTMLFormElement>();
 const height = ref(props.element.data.height);
@@ -58,12 +49,4 @@ watch(
     if (valid) return elementBus.emit('height', height.value);
   }, 500),
 );
-
-const deleteItem = () => {
-  return eventBus.channel('app').emit('showConfirmationModal', {
-    title: 'Delete slide',
-    message: 'Are you sure you want to delete current slide?',
-    action: () => elementBus.emit('delete'),
-  });
-};
 </script>
