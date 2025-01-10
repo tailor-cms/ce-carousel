@@ -1,23 +1,27 @@
 <template>
   <VSheet rounded="lg" border>
-    <VToolbar class="px-4" color="primary-lighten-5">
-      <span v-if="!isDisabled" class="drag-handle" @drag.stop.prevent>
-        <VIcon icon="mdi-drag-vertical" />
-      </span>
-      <div class="mx-2">Slide {{ position }}</div>
-      <VSpacer />
-      <VBtn
-        v-if="!isDisabled && allowDeletion"
-        v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
-        color="secondary-lighten-1"
-        size="x-small"
-        variant="tonal"
-        icon
-        @click="deleteItem"
-      >
-        <VIcon icon="mdi-delete-outline" size="large" />
-      </VBtn>
-    </VToolbar>
+    <VHover v-slot="{ isHovering, props: hoverProps }">
+      <VToolbar v-bind="hoverProps" class="px-4" color="primary-lighten-5">
+        <span v-if="!isDisabled" class="drag-handle" @drag.stop.prevent>
+          <VIcon icon="mdi-drag-vertical" />
+        </span>
+        <div class="mx-2">Slide {{ position }}</div>
+        <VSpacer />
+        <VFadeTransition>
+          <VBtn
+            v-if="isHovering && !isDisabled && allowDeletion"
+            v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
+            color="secondary-lighten-1"
+            size="x-small"
+            variant="tonal"
+            icon
+            @click="deleteItem"
+          >
+            <VIcon icon="mdi-delete-outline" size="large" />
+          </VBtn>
+        </VFadeTransition>
+      </VToolbar>
+    </VHover>
     <VSheet
       :height="height"
       class="text-center overflow-y-auto"

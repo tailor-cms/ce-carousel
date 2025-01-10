@@ -119,7 +119,7 @@ elementBus.on('height', (height: number) => {
   visibility: hidden;
 }
 
-.drag-handle {
+:deep(.drag-handle) {
   cursor: pointer;
 }
 </style>
