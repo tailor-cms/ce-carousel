@@ -1,14 +1,6 @@
 <template>
   <VForm ref="form" validate-on="submit">
     <VToolbarItems class="ga-2">
-      <VBtn
-        color="primary-darken-4"
-        prepend-icon="mdi-plus"
-        variant="text"
-        @click="elementBus.emit('add')"
-      >
-        Add slide
-      </VBtn>
       <VTextField
         v-model="height"
         :rules="[

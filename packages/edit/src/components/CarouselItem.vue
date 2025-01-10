@@ -1,23 +1,22 @@
 <template>
-  <VSheet color="grey-lighten-5" elevation="2" rounded="lg">
+  <VSheet rounded="lg" border>
     <VToolbar class="px-4" color="primary-lighten-5">
       <span v-if="!isDisabled" class="drag-handle" @drag.stop.prevent>
         <VIcon icon="mdi-drag-vertical" />
       </span>
       <div class="mx-2">Slide {{ position }}</div>
       <VSpacer />
-      <div v-if="!isDisabled" class="d-flex mx-2 ga-1">
-        <VBtn
-          v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
-          color="secondary-lighten-1"
-          size="x-small"
-          variant="tonal"
-          icon
-          @click="deleteItem"
-        >
-          <VIcon icon="mdi-delete-outline" size="large" />
-        </VBtn>
-      </div>
+      <VBtn
+        v-if="!isDisabled && allowDeletion"
+        v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
+        color="secondary-lighten-1"
+        size="x-small"
+        variant="tonal"
+        icon
+        @click="deleteItem"
+      >
+        <VIcon icon="mdi-delete-outline" size="large" />
+      </VBtn>
     </VToolbar>
     <VSheet
       :height="height"
@@ -59,6 +58,7 @@ import map from 'lodash/map';
 import pull from 'lodash/pull';
 
 interface Props {
+  allowDeletion: boolean;
   item: any;
   position: number;
   height: number;

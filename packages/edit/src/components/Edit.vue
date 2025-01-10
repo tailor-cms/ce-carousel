@@ -1,41 +1,54 @@
 <template>
-  <div class="tce-carousel">
-    <ElementPlaceholder
-      v-if="!elementData.items.length"
-      :icon="manifest.ui.icon"
-      :is-disabled="isDisabled"
-      :is-focused="isFocused"
-      :name="`${manifest.name} component`"
-      active-icon="mdi-arrow-up"
-      active-placeholder="Use toolbar to add the first slide to the carousel"
-    />
-    <Draggable
-      v-model="elementData.items"
-      :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
-      :disabled="isDisabled"
-      animation="150"
-      handle=".drag-handle"
-      item-key="id"
-      @end="dragElementIndex = -1"
-      @start="dragElementIndex = $event.oldIndex"
-      @update:model-value="emit('save', elementData)"
-    >
-      <template #item="{ element: item, index }">
-        <CarouselItem
-          :embed-types="embedTypes"
-          :embeds="embedsByItem[item.id]"
-          :height="elementData.height"
-          :is-disabled="isDisabled"
-          :is-focused="isFocused"
-          :item="item"
-          :position="index + 1"
-          class="overflow-y-auto"
-          @delete="deleteItem(index)"
-          @save="saveItem($event, index)"
-        />
-      </template>
-    </Draggable>
-  </div>
+  <VCard class="tce-carousel my-2" color="grey-lighten-5">
+    <VToolbar class="px-4" color="primary-darken-3" height="36">
+      <VIcon
+        :icon="manifest.ui.icon"
+        color="secondary-lighten-2"
+        size="18"
+        start
+      />
+      <span class="text-subtitle-2">{{ manifest.name }}</span>
+    </VToolbar>
+    <div class="pa-6 text-center">
+      <Draggable
+        v-model="elementData.items"
+        :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
+        :disabled="isDisabled"
+        animation="150"
+        handle=".drag-handle"
+        item-key="id"
+        @end="dragElementIndex = -1"
+        @start="dragElementIndex = $event.oldIndex"
+        @update:model-value="emit('save', elementData)"
+      >
+        <template #item="{ element: item, index }">
+          <CarouselItem
+            :allow-deletion="elementData.items.length > 1"
+            :embed-types="embedTypes"
+            :embeds="embedsByItem[item.id]"
+            :height="elementData.height"
+            :is-disabled="isDisabled"
+            :is-focused="isFocused"
+            :item="item"
+            :position="index + 1"
+            class="overflow-y-auto"
+            @delete="deleteItem(index)"
+            @save="saveItem($event, index)"
+          />
+        </template>
+      </Draggable>
+      <VBtn
+        v-if="!isDisabled"
+        class="mt-6"
+        color="primary-darken-4"
+        prepend-icon="mdi-tab-plus"
+        variant="text"
+        @click="addSlide"
+      >
+        Add Slide
+      </VBtn>
+    </div>
+  </VCard>
 </template>
 
 <script lang="ts" setup>
@@ -45,10 +58,9 @@ import manifest, {
   ElementData,
 } from '@tailor-cms/ce-carousel-manifest';
 import cloneDeep from 'lodash/cloneDeep';
-import { createId as cuid } from '@paralleldrive/cuid2';
 import Draggable from 'vuedraggable/src/vuedraggable';
-import { ElementPlaceholder } from '@tailor-cms/core-components';
 import pick from 'lodash/pick';
+import { v4 as uuid } from 'uuid';
 
 import CarouselItem from './CarouselItem.vue';
 
@@ -85,11 +97,11 @@ const deleteItem = (index: number) => {
   emit('save', elementData);
 };
 
-elementBus.on('add', () => {
-  const id = cuid();
+const addSlide = () => {
+  const id = uuid();
   elementData.items.push({ id, elementIds: [] });
   emit('save', elementData);
-});
+};
 
 elementBus.on('height', (height: number) => {
   elementData.height = height;
@@ -103,12 +115,8 @@ elementBus.on('height', (height: number) => {
   margin: 1rem 0;
 }
 
-:deep(.sortable-ghost) {
-  box-shadow: none !important;
-
-  > * {
-    visibility: hidden;
-  }
+:deep(.sortable-ghost) > * {
+  visibility: hidden;
 }
 
 .drag-handle {

@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import type {
   DataInitializer,
   ElementData,
@@ -14,7 +16,7 @@ export const name = 'Carousel';
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
   embeds: {},
-  items: [],
+  items: [{ id: uuid(), elementIds: [] }],
   height: 500,
 });
 
