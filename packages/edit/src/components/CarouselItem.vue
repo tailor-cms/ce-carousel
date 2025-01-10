@@ -39,9 +39,9 @@
         </template>
       </VAlert>
       <TailorEmbeddedContainer
+        :allowed-element-config="embedElementConfig"
         :container="{ embeds }"
         :is-disabled="isDisabled"
-        :types="embedTypes"
         class="px-8 py-3"
         @delete="deleteEmbed"
         @save="saveEmbed($event.embeds)"
@@ -57,19 +57,27 @@ import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import pull from 'lodash/pull';
 
+interface Embed {
+  id: string;
+  data: Record<string, any>;
+  embedded: boolean;
+  position: number;
+  type: string;
+}
+
 interface Props {
   allowDeletion: boolean;
-  item: any;
+  item: { id: string; elementIds: string[] };
   position: number;
   height: number;
-  embedTypes: any[];
-  embeds?: any;
+  embedElementConfig: any[];
+  embeds?: Record<string, Embed>;
   isFocused?: boolean;
   isDisabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  embeds: () => {},
+  embeds: () => ({}),
   isDisabled: false,
   isFocused: false,
   isExpanded: false,

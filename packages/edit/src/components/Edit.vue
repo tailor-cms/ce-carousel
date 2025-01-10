@@ -24,7 +24,7 @@
         <template #item="{ element: item, index }">
           <CarouselItem
             :allow-deletion="elementData.items.length > 1"
-            :embed-types="embedTypes"
+            :embed-element-config="embedElementConfig"
             :embeds="embedsByItem[item.id]"
             :height="elementData.height"
             :is-disabled="isDisabled"
@@ -66,7 +66,7 @@ import CarouselItem from './CarouselItem.vue';
 
 const props = defineProps<{
   element: Element;
-  embedTypes: any[];
+  embedElementConfig: any[];
   isFocused: boolean;
   isDisabled: boolean;
 }>();
