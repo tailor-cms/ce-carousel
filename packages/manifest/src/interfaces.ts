@@ -1,6 +1,12 @@
-// Example counter component
+interface CarouselItem {
+  id: string;
+  elementIds: string[];
+}
+
 export interface ElementData {
-  count: number;
+  embeds: Record<string, any>;
+  items: CarouselItem[];
+  height: number;
 }
 
 export interface Element {
@@ -29,6 +35,7 @@ export interface ElementManifest {
   version: string;
   name: string;
   ssr: boolean;
+  isComposite: boolean;
   initState: DataInitializer;
   Edit?: object;
   TopToolbar?: object;
