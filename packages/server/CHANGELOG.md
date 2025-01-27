@@ -1,5 +1,11 @@
 # @tailor-cms/ce-carousel-server
 
+## 0.0.4
+
+### Patch Changes
+
+- Update data structure to follow old one so data migration is not needed.
+
 ## 0.0.3
 
 ### Patch Changes
