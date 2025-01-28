@@ -1,7 +1,7 @@
 <template>
   <VCard class="tce-root">
     <VCarousel :key="carouselKey" :height="data.height" :show-arrows="false">
-      <VCarouselItem v-for="item in data.items" :key="item.id">
+      <VCarouselItem v-for="item in slides" :key="item.id">
         <div class="pa-4">
           <VAlert v-if="!embeds[item.id].length" type="info" variant="tonal">
             No content elements added to this item.
@@ -17,18 +17,20 @@
 import { computed } from 'vue';
 import { ElementData } from '@tailor-cms/ce-carousel-manifest';
 import map from 'lodash/map';
+import reduce from 'lodash/reduce';
 import sortBy from 'lodash/sortBy';
 
 const props = defineProps<{ data: ElementData; userState: any }>();
 defineEmits(['interaction']);
 
-const carouselKey = computed(() => map(props.data.items, 'id').join(', '));
-
+const slides = computed(() => sortBy(props.data.items, 'position'));
+const carouselKey = computed(() => map(slides.value, 'id').join(', '));
 const embeds = computed(() => {
   const { items, embeds } = props.data;
-  return items.reduce(
+  return reduce(
+    items,
     (acc, item) => {
-      const itemEmbeds = item.elementIds.map((id) => embeds[id]);
+      const itemEmbeds = Object.keys(item.body).map((id) => embeds[id]);
       acc[item.id] = sortBy(itemEmbeds, 'position');
       return acc;
     },

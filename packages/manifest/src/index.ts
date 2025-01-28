@@ -6,6 +6,8 @@ import type {
   ElementManifest,
 } from './interfaces';
 
+const id = uuid();
+
 // Element unique id within the target system (e.g. Tailor)
 export const type = 'CAROUSEL';
 
@@ -16,7 +18,13 @@ export const name = 'Carousel';
 // entity)
 export const initState: DataInitializer = (): ElementData => ({
   embeds: {},
-  items: [{ id: uuid(), elementIds: [] }],
+  items: {
+    [id]: {
+      id,
+      body: {},
+      position: 1,
+    },
+  },
   height: 500,
 });
 

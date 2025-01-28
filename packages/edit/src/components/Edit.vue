@@ -1,5 +1,5 @@
 <template>
-  <VCard class="tce-carousel my-2" color="grey-lighten-5">
+  <VCard class="tce-carousel" color="grey-lighten-5">
     <VToolbar class="px-4" color="primary-darken-2" height="36">
       <VIcon
         :icon="manifest.ui.icon"
@@ -11,19 +11,19 @@
     </VToolbar>
     <div class="pa-6 text-center">
       <Draggable
-        v-model="elementData.items"
         :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
         :disabled="isDisabled"
+        :model-value="slides"
         animation="150"
         handle=".drag-handle"
         item-key="id"
-        @end="dragElementIndex = -1"
+        @end="reorder"
         @start="dragElementIndex = $event.oldIndex"
-        @update:model-value="emit('save', elementData)"
+        @update:model-value="reorder"
       >
         <template #item="{ element: item, index }">
           <CarouselItem
-            :allow-deletion="elementData.items.length > 1"
+            :allow-deletion="slideCount > 1"
             :embed-element-config="embedElementConfig"
             :embeds="embedsByItem[item.id]"
             :height="elementData.height"
@@ -32,8 +32,8 @@
             :item="item"
             :position="index + 1"
             class="overflow-y-auto"
-            @delete="deleteItem(index)"
-            @save="saveItem($event, index)"
+            @delete="deleteItem(item.id)"
+            @save="saveItem($event)"
           />
         </template>
       </Draggable>
@@ -59,7 +59,10 @@ import manifest, {
 } from '@tailor-cms/ce-carousel-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import Draggable from 'vuedraggable/src/vuedraggable';
+import isNumber from 'lodash/isNumber';
 import pick from 'lodash/pick';
+import reduce from 'lodash/reduce';
+import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import CarouselItem from './CarouselItem.vue';
@@ -77,29 +80,64 @@ const elementBus: any = inject('$elementBus');
 const dragElementIndex = ref<number>(-1);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 
+const slides = computed(() => sortBy(elementData.items, 'position'));
+const slideCount = computed(() => slides.value.length);
 const embedsByItem = computed(() =>
-  elementData.items.reduce((acc, item) => {
-    acc[item.id] = pick(elementData.embeds, item.elementIds);
-    return acc;
-  }, {} as any),
+  reduce(
+    elementData.items,
+    (acc, item) => {
+      acc[item.id] = pick(elementData.embeds, Object.keys(item.body));
+      return acc;
+    },
+    {} as any,
+  ),
 );
 
-const saveItem = ({ item, embeds = {} }: any, index: number) => {
-  elementData.items[index] = item;
+const saveItem = ({ item, embeds = {} }: any) => {
+  elementData.items[item.id] = item;
   Object.assign(elementData.embeds, embeds);
   emit('save', elementData);
 };
 
-const deleteItem = (index: number) => {
-  const { elementIds } = elementData.items[index];
-  elementIds.forEach((id) => delete elementData.embeds[id]);
-  elementData.items.splice(index, 1);
+const deleteItem = (id: string) => {
+  const { body } = elementData.items[id];
+  Object.keys(body).forEach((id) => delete elementData.embeds[id]);
+  delete elementData.items[id];
   emit('save', elementData);
 };
 
 const addSlide = () => {
   const id = uuid();
-  elementData.items.push({ id, elementIds: [] });
+  elementData.items[id] = {
+    id,
+    body: {},
+    position: slideCount.value + 1,
+  };
+  emit('save', elementData);
+};
+
+const calculateNewPosition = (oldIndex: number, newIndex: number) => {
+  if (!newIndex) return slides.value[newIndex].position / 2;
+  if (newIndex + 1 === slideCount.value) {
+    return slides.value[newIndex].position + 1;
+  }
+  const direction = oldIndex > newIndex ? -1 : 1;
+  const prevPos = slides.value[newIndex].position;
+  const nextPos = slides.value[newIndex + direction].position;
+  return (nextPos + prevPos) / 2;
+};
+
+const reorder = ({
+  oldIndex,
+  newIndex,
+}: {
+  oldIndex: number;
+  newIndex: number;
+}) => {
+  if (!isNumber(newIndex) || !isNumber(oldIndex)) return;
+  const position = calculateNewPosition(oldIndex, newIndex);
+  const currentItem = slides.value[oldIndex];
+  Object.assign(elementData.items[currentItem.id], { position });
   emit('save', elementData);
 };
 
@@ -112,7 +150,6 @@ elementBus.on('height', (height: number) => {
 <style lang="scss" scoped>
 .tce-carousel {
   text-align: left;
-  margin: 1rem 0;
 }
 
 :deep(.sortable-ghost) > * {

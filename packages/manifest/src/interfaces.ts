@@ -1,11 +1,12 @@
-interface CarouselItem {
+export interface CarouselItem {
   id: string;
-  elementIds: string[];
+  body: Record<string, any>;
+  position: number;
 }
 
 export interface ElementData {
   embeds: Record<string, any>;
-  items: CarouselItem[];
+  items: Record<string, CarouselItem>;
   height: number;
 }
 
