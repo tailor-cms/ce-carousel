@@ -1,5 +1,11 @@
 # @tailor-cms/ce-carousel-manifest
 
+## 0.0.5
+
+### Patch Changes
+
+- Bumped to the latest tce-boot and core-components version and migrated code accordingly.
+
 ## 0.0.4
 
 ### Patch Changes
