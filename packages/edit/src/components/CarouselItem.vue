@@ -2,14 +2,14 @@
   <VSheet rounded="lg" border>
     <VHover v-slot="{ isHovering, props: hoverProps }">
       <VToolbar v-bind="hoverProps" class="px-4" color="primary-lighten-5">
-        <span v-if="!isDisabled" class="drag-handle" @drag.stop.prevent>
+        <span v-if="!isReadonly" class="drag-handle" @drag.stop.prevent>
           <VIcon icon="mdi-drag-vertical" />
         </span>
         <div class="mx-2">Slide {{ position }}</div>
         <VSpacer />
         <VFadeTransition>
           <VBtn
-            v-if="isHovering && !isDisabled && allowDeletion"
+            v-if="isHovering && !isReadonly && allowDeletion"
             v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
             color="secondary-lighten-1"
             size="x-small"
@@ -35,7 +35,7 @@
         variant="tonal"
         prominent
       >
-        <template v-if="isDisabled">
+        <template v-if="isReadonly">
           No content elements added to this item.
         </template>
         <template v-else>
@@ -45,7 +45,7 @@
       <TailorEmbeddedContainer
         :allowed-element-config="embedElementConfig"
         :container="{ embeds }"
-        :is-disabled="isDisabled"
+        :is-disabled="isReadonly"
         class="px-8 py-3"
         @delete="deleteEmbed"
         @save="saveEmbed($event.embeds)"
@@ -77,12 +77,12 @@ interface Props {
   embedElementConfig: any[];
   embeds?: Record<string, Embed>;
   isFocused?: boolean;
-  isDisabled?: boolean;
+  isReadonly?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   embeds: () => ({}),
-  isDisabled: false,
+  isReadonly: false,
   isFocused: false,
   isExpanded: false,
 });

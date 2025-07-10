@@ -12,7 +12,7 @@
     <div class="pa-6 text-center">
       <Draggable
         :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
-        :disabled="isDisabled"
+        :disabled="isReadonly"
         :model-value="slides"
         animation="150"
         handle=".drag-handle"
@@ -27,7 +27,7 @@
             :embed-element-config="embedElementConfig"
             :embeds="embedsByItem[item.id]"
             :height="elementData.height"
-            :is-disabled="isDisabled"
+            :is-readonly="isReadonly"
             :is-focused="isFocused"
             :item="item"
             :position="index + 1"
@@ -38,7 +38,7 @@
         </template>
       </Draggable>
       <VBtn
-        v-if="!isDisabled"
+        v-if="!isReadonly"
         class="mt-6"
         color="primary-darken-4"
         prepend-icon="mdi-tab-plus"
@@ -70,8 +70,9 @@ import CarouselItem from './CarouselItem.vue';
 const props = defineProps<{
   element: Element;
   embedElementConfig: any[];
+  isDragged: boolean;
   isFocused: boolean;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 const emit = defineEmits(['save']);
 
