@@ -12,7 +12,7 @@
     <div class="pa-6 text-center">
       <Draggable
         :component-data="{ class: 'd-flex flex-column w-100 ga-4' }"
-        :disabled="isDisabled"
+        :disabled="isReadonly"
         :model-value="slides"
         animation="150"
         handle=".drag-handle"
@@ -26,9 +26,8 @@
             :allow-deletion="slideCount > 1"
             :embed-element-config="embedElementConfig"
             :embeds="embedsByItem[item.id]"
-            :height="elementData.height"
-            :is-disabled="isDisabled"
             :is-focused="isFocused"
+            :is-readonly="isReadonly"
             :item="item"
             :position="index + 1"
             class="overflow-y-auto"
@@ -38,7 +37,7 @@
         </template>
       </Draggable>
       <VBtn
-        v-if="!isDisabled"
+        v-if="!isReadonly"
         class="mt-6"
         color="primary-darken-4"
         prepend-icon="mdi-tab-plus"
@@ -52,17 +51,13 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, isNumber, pick, reduce, sortBy } from 'lodash-es';
 import { computed, defineEmits, defineProps, inject, reactive, ref } from 'vue';
 import manifest, {
   Element,
   ElementData,
 } from '@tailor-cms/ce-carousel-manifest';
-import cloneDeep from 'lodash/cloneDeep';
 import Draggable from 'vuedraggable/src/vuedraggable';
-import isNumber from 'lodash/isNumber';
-import pick from 'lodash/pick';
-import reduce from 'lodash/reduce';
-import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import CarouselItem from './CarouselItem.vue';
@@ -70,8 +65,9 @@ import CarouselItem from './CarouselItem.vue';
 const props = defineProps<{
   element: Element;
   embedElementConfig: any[];
+  isDragged: boolean;
   isFocused: boolean;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 const emit = defineEmits(['save']);
 

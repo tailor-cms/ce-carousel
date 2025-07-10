@@ -1,15 +1,16 @@
+<!-- eslint-disable vue/no-undef-components -->
 <template>
   <VSheet rounded="lg" border>
     <VHover v-slot="{ isHovering, props: hoverProps }">
       <VToolbar v-bind="hoverProps" class="px-4" color="primary-lighten-5">
-        <span v-if="!isDisabled" class="drag-handle" @drag.stop.prevent>
+        <span v-if="!isReadonly" class="drag-handle" @drag.stop.prevent>
           <VIcon icon="mdi-drag-vertical" />
         </span>
         <div class="mx-2">Slide {{ position }}</div>
         <VSpacer />
         <VFadeTransition>
           <VBtn
-            v-if="isHovering && !isDisabled && allowDeletion"
+            v-if="isHovering && !isReadonly && allowDeletion"
             v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
             color="secondary-lighten-1"
             size="x-small"
@@ -22,11 +23,7 @@
         </VFadeTransition>
       </VToolbar>
     </VHover>
-    <VSheet
-      :height="height"
-      class="text-center overflow-y-auto"
-      color="transparent"
-    >
+    <VSheet class="text-center overflow-y-auto" color="transparent">
       <VAlert
         v-if="!hasElements"
         class="mx-6 mt-4 mb-2"
@@ -35,7 +32,7 @@
         variant="tonal"
         prominent
       >
-        <template v-if="isDisabled">
+        <template v-if="isReadonly">
           No content elements added to this item.
         </template>
         <template v-else>
@@ -45,7 +42,7 @@
       <TailorEmbeddedContainer
         :allowed-element-config="embedElementConfig"
         :container="{ embeds }"
-        :is-disabled="isDisabled"
+        :is-disabled="isReadonly"
         class="px-8 py-3"
         @delete="deleteEmbed"
         @save="saveEmbed($event.embeds)"
@@ -55,11 +52,9 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, forEach, isEmpty } from 'lodash-es';
 import { computed, inject } from 'vue';
 import type { CarouselItem } from '@tailor-cms/ce-carousel-manifest';
-import cloneDeep from 'lodash/cloneDeep';
-import forEach from 'lodash/forEach';
-import isEmpty from 'lodash/isEmpty';
 
 interface Embed {
   id: string;
@@ -73,16 +68,15 @@ interface Props {
   allowDeletion: boolean;
   item: CarouselItem;
   position: number;
-  height: number;
   embedElementConfig: any[];
   embeds?: Record<string, Embed>;
   isFocused?: boolean;
-  isDisabled?: boolean;
+  isReadonly?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   embeds: () => ({}),
-  isDisabled: false,
+  isReadonly: false,
   isFocused: false,
   isExpanded: false,
 });
