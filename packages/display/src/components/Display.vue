@@ -1,12 +1,12 @@
 <template>
-  <VCard class="tce-root">
+  <VCard class="tce-carousel-root" color="grey-lighten-5" border flat>
     <VCarousel
       :key="carouselKey"
       :height="element.data.height"
       :show-arrows="false"
     >
       <VCarouselItem v-for="item in slides" :key="item.id">
-        <div class="pa-4">
+        <div class="px-6 py-4">
           <VAlert v-if="!embeds[item.id].length" type="info" variant="tonal">
             No content elements added to this item.
           </VAlert>
@@ -42,13 +42,8 @@ const embeds = computed(() => {
 </script>
 
 <style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-
 .v-carousel-item :deep(.v-responsive__content) {
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
   overflow-y: auto;
 }
 </style>
