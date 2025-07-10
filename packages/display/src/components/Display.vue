@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-undef-components -->
 <template>
   <VCard class="tce-carousel-root" color="grey-lighten-5" border flat>
     <VCarousel

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-undef-components -->
 <template>
   <VSheet rounded="lg" border>
     <VHover v-slot="{ isHovering, props: hoverProps }">
