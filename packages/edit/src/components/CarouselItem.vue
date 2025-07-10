@@ -55,11 +55,9 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, forEach, isEmpty } from 'lodash-es';
 import { computed, inject } from 'vue';
 import type { CarouselItem } from '@tailor-cms/ce-carousel-manifest';
-import cloneDeep from 'lodash/cloneDeep';
-import forEach from 'lodash/forEach';
-import isEmpty from 'lodash/isEmpty';
 
 interface Embed {
   id: string;

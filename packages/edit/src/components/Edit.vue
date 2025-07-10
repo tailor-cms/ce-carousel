@@ -52,17 +52,13 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, isNumber, pick, reduce, sortBy } from 'lodash-es';
 import { computed, defineEmits, defineProps, inject, reactive, ref } from 'vue';
 import manifest, {
   Element,
   ElementData,
 } from '@tailor-cms/ce-carousel-manifest';
-import cloneDeep from 'lodash/cloneDeep';
 import Draggable from 'vuedraggable/src/vuedraggable';
-import isNumber from 'lodash/isNumber';
-import pick from 'lodash/pick';
-import reduce from 'lodash/reduce';
-import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import CarouselItem from './CarouselItem.vue';

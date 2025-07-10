@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import type { Element } from '@tailor-cms/ce-carousel-manifest';
 
 const props = defineProps<{ element: Element }>();
