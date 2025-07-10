@@ -7,7 +7,8 @@ import type {
   ElementManifest,
 } from './interfaces';
 
-const id = uuid();
+const id1 = uuid();
+const id2 = uuid();
 
 // Element unique id within the target system (e.g. Tailor)
 export const type = 'CAROUSEL';
@@ -20,8 +21,13 @@ export const name = 'Carousel';
 export const initState: DataInitializer = (): ElementData => ({
   embeds: {},
   items: {
-    [id]: {
-      id,
+    [id1]: {
+      id: id1,
+      body: {},
+      position: 1,
+    },
+    [id2]: {
+      id: id2,
       body: {},
       position: 1,
     },
@@ -48,7 +54,7 @@ export const ai = {
     schema: {
       type: 'object',
       properties: {
-        slides: { type: 'array', items: { type: 'string' } },
+        slides: { type: 'array', items: { type: 'string', minItems: 2 } },
       },
       required: ['slides'],
       additionalProperties: false,
