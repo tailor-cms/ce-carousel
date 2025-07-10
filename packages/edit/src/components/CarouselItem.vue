@@ -23,10 +23,7 @@
         </VFadeTransition>
       </VToolbar>
     </VHover>
-    <VSheet
-      class="text-center overflow-y-auto"
-      color="transparent"
-    >
+    <VSheet class="text-center overflow-y-auto" color="transparent">
       <VAlert
         v-if="!hasElements"
         class="mx-6 mt-4 mb-2"
