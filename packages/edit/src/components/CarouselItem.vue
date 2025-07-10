@@ -29,9 +29,9 @@
     >
       <VAlert
         v-if="!hasElements"
-        class="mx-8 my-3"
-        color="primary-darken-2"
-        icon="mdi-information-variant"
+        class="mx-6 mt-4 mb-2"
+        color="primary-darken-1"
+        icon="mdi-information-outline"
         variant="tonal"
         prominent
       >
