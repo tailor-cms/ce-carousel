@@ -23,7 +23,6 @@
       </VToolbar>
     </VHover>
     <VSheet
-      :height="height"
       class="text-center overflow-y-auto"
       color="transparent"
     >
@@ -71,7 +70,6 @@ interface Props {
   allowDeletion: boolean;
   item: CarouselItem;
   position: number;
-  height: number;
   embedElementConfig: any[];
   embeds?: Record<string, Embed>;
   isFocused?: boolean;

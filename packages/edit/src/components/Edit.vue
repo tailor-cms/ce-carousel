@@ -26,7 +26,6 @@
             :allow-deletion="slideCount > 1"
             :embed-element-config="embedElementConfig"
             :embeds="embedsByItem[item.id]"
-            :height="elementData.height"
             :is-readonly="isReadonly"
             :is-focused="isFocused"
             :item="item"
