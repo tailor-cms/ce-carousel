@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-undef-components -->
 <template>
-  <VCard class="tce-carousel-root" color="grey-lighten-5" border flat>
+  <VCard class="tce-carousel-root" border flat>
     <VCarousel
       :key="carouselKey"
       :height="element.data.height"
@@ -21,10 +21,9 @@
 <script setup lang="ts">
 import { map, reduce, sortBy } from 'lodash-es';
 import { computed } from 'vue';
-import { Element } from '@tailor-cms/ce-carousel-manifest';
+import type { Element } from '@tailor-cms/ce-carousel-manifest';
 
 const props = defineProps<{ element: Element; userState: any }>();
-defineEmits(['interaction']);
 
 const slides = computed(() => sortBy(props.element.data.items, 'position'));
 const carouselKey = computed(() => map(slides.value, 'id').join(', '));

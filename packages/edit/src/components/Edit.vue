@@ -7,7 +7,7 @@
         size="18"
         start
       />
-      <span class="text-subtitle-2">{{ manifest.name }}</span>
+      <span class="text-title-small">{{ manifest.name }}</span>
     </VToolbar>
     <div class="pa-6 text-center">
       <Draggable
@@ -41,22 +41,19 @@
         class="mt-6"
         color="primary-darken-4"
         prepend-icon="mdi-tab-plus"
+        text="Add Slide"
         variant="text"
         @click="addSlide"
-      >
-        Add Slide
-      </VBtn>
+      />
     </div>
   </VCard>
 </template>
 
 <script lang="ts" setup>
 import { cloneDeep, isNumber, pick, reduce, sortBy } from 'lodash-es';
-import { computed, defineEmits, defineProps, inject, reactive, ref } from 'vue';
-import manifest, {
-  Element,
-  ElementData,
-} from '@tailor-cms/ce-carousel-manifest';
+import { computed, inject, reactive, ref } from 'vue';
+import type { Element, ElementData } from '@tailor-cms/ce-carousel-manifest';
+import manifest from '@tailor-cms/ce-carousel-manifest';
 import Draggable from 'vuedraggable/src/vuedraggable';
 import { v4 as uuid } from 'uuid';
 
@@ -69,7 +66,9 @@ const props = defineProps<{
   isFocused: boolean;
   isReadonly: boolean;
 }>();
-const emit = defineEmits(['save']);
+const emit = defineEmits<{
+  save: [data: ElementData];
+}>();
 
 const elementBus: any = inject('$elementBus');
 
