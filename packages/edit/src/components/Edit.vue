@@ -53,8 +53,8 @@
 import { cloneDeep, isNumber, pick, reduce, sortBy } from 'lodash-es';
 import { computed, inject, reactive, ref } from 'vue';
 import type { Element, ElementData } from '@tailor-cms/ce-carousel-manifest';
-import manifest from '@tailor-cms/ce-carousel-manifest';
 import Draggable from 'vuedraggable/src/vuedraggable';
+import manifest from '@tailor-cms/ce-carousel-manifest';
 import { v4 as uuid } from 'uuid';
 
 import CarouselItem from './CarouselItem.vue';
