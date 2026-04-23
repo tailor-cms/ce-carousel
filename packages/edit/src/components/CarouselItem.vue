@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-undef-components -->
 <template>
-  <VSheet rounded="lg" border>
+  <VSheet class="carousel-item" rounded="lg" border>
     <VHover v-slot="{ isHovering, props: hoverProps }">
       <VToolbar v-bind="hoverProps" class="px-4" color="primary-lighten-5">
         <span v-if="!isReadonly" class="drag-handle" @drag.stop.prevent>
@@ -12,6 +12,7 @@
           <VBtn
             v-if="isHovering && !isReadonly && allowDeletion"
             v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
+            aria-label="Delete slide"
             color="secondary-lighten-1"
             size="x-small"
             variant="tonal"
