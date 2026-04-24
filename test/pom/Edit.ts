@@ -29,6 +29,8 @@ export class Edit extends pom.EditPanel {
   }
 
   addEmbedBtn(slideIndex: number): Locator {
-    return this.slideAt(slideIndex).getByRole('button', { name: 'Add content' });
+    return this.slideAt(slideIndex).getByRole('button', {
+      name: 'Add content',
+    });
   }
 }
