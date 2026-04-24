@@ -7,6 +7,7 @@ const ELEMENT_ID = 'test-carousel-display';
 
 test.beforeEach(async ({ page }) => {
   await elementClient.reset(ELEMENT_ID);
+  await elementClient.resetState(ELEMENT_ID);
   await page.goto(`/?id=${ELEMENT_ID}`);
   await page.waitForLoadState('networkidle');
 });
@@ -38,8 +39,4 @@ test.describe('Custom slides', () => {
     // VCarousel lazy-renders; pagination dots reflect slide count
     await expect(display.carousel.locator('.v-btn--icon')).toHaveCount(3);
   });
-});
-
-test.afterAll(async () => {
-  await elementClient.reset(ELEMENT_ID);
 });

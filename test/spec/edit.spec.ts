@@ -47,9 +47,6 @@ test.describe('Readonly mode', () => {
     await expect(edit.addSlideBtn).not.toBeVisible();
     await edit.slideHeader(0).hover();
     await expect(edit.deleteBtn(0)).not.toBeVisible();
+    await expect(edit.addEmbedBtn(0)).not.toBeVisible();
   });
-});
-
-test.afterAll(async () => {
-  await elementClient.reset(ELEMENT_ID);
 });

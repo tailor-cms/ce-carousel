@@ -43,7 +43,7 @@
       <TailorEmbeddedContainer
         :allowed-element-config="embedElementConfig"
         :container="{ embeds }"
-        :is-disabled="isReadonly"
+        :is-readonly="isReadonly"
         class="px-8 py-3"
         @delete="deleteEmbed"
         @save="saveEmbed($event.embeds)"

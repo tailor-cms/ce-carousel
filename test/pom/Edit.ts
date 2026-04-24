@@ -27,4 +27,8 @@ export class Edit extends pom.EditPanel {
       exact: true,
     });
   }
+
+  addEmbedBtn(slideIndex: number): Locator {
+    return this.slideAt(slideIndex).getByRole('button', { name: 'Add content' });
+  }
 }
