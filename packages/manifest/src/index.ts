@@ -1,4 +1,4 @@
-import { OpenAISchema } from '@tailor-cms/cek-common';
+import type { AiConfig } from '@tailor-cms/cek-common';
 import { v4 as uuid } from 'uuid';
 
 import type {
@@ -47,7 +47,10 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const ai = {
+export const isEmpty = (data: ElementData): boolean =>
+  !data.items || Object.keys(data.items).length === 0;
+
+export const ai: AiConfig = {
   Schema: {
     type: 'json_schema',
     name: 'ce_carousel',
@@ -59,8 +62,8 @@ export const ai = {
       required: ['slides'],
       additionalProperties: false,
     },
-  } as OpenAISchema,
-  getPrompt: () => `
+  },
+  getPrompt: (): string => `
     Generate a carousel content element as an object with the following
     properties: { "slides": [] }
     where:
@@ -68,7 +71,7 @@ export const ai = {
         contains text to be displayed in the slide. Each slide should have a few
         paragraphs about the topic.
   `,
-  processResponse: (val: any) => {
+  processResponse: (val: any): Record<string, any> => {
     const slides = val.slides.reduce(
       (acc: Record<string, any>, content: string, index: number) => {
         const embedId = uuid();
@@ -98,11 +101,12 @@ export const ai = {
 
 const manifest: ElementManifest = {
   type,
-  version: '1.0',
+  version,
   name,
   isComposite: true,
   ssr: false,
   initState,
+  isEmpty,
   ui,
   ai,
 };
