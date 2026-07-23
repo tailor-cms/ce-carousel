@@ -32,6 +32,14 @@ const rules = computed(() => [
 ]);
 
 watch(
+  () => props.element.data.height,
+  (value) => {
+    if (value === height.value) return;
+    height.value = value;
+  },
+);
+
+watch(
   height,
   debounce(async () => {
     if (!form.value) return;
