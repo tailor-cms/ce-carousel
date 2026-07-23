@@ -18,7 +18,7 @@ export class Edit extends pom.EditPanel {
   }
 
   slideHeader(index: number): Locator {
-    return this.slideAt(index).locator('.v-toolbar');
+    return this.slideAt(index).locator('.v-expansion-panel-title');
   }
 
   deleteBtn(slideIndex: number): Locator {
