@@ -1,34 +1,43 @@
 <!-- eslint-disable vue/no-undef-components -->
 <template>
-  <VSheet class="carousel-item" rounded="lg" border>
+  <VExpansionPanel :value="item.id" class="carousel-item border">
     <VHover v-slot="{ isHovering, props: hoverProps }">
-      <VToolbar v-bind="hoverProps" class="px-4" color="primary-lighten-5">
-        <span v-if="!isReadonly" class="drag-handle" @drag.stop.prevent>
-          <VIcon icon="mdi-drag-vertical" />
-        </span>
-        <div class="mx-2">Slide {{ position }}</div>
-        <VSpacer />
-        <VFadeTransition>
-          <VBtn
-            v-if="isHovering && !isReadonly && allowDeletion"
-            v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
-            aria-label="Delete slide"
-            color="secondary-lighten-1"
-            size="x-small"
-            variant="tonal"
-            icon
-            @click="deleteItem"
+      <VExpansionPanelTitle
+        v-bind="hoverProps"
+        class="pa-2 pr-4"
+        min-height="56"
+      >
+        <div class="d-flex align-center w-100 ga-2">
+          <span
+            v-if="!isReadonly"
+            class="carousel-drag-handle"
+            @drag.stop.prevent
           >
-            <VIcon icon="mdi-delete-outline" size="large" />
-          </VBtn>
-        </VFadeTransition>
-      </VToolbar>
+            <VIcon icon="mdi-drag-vertical" />
+          </span>
+          Slide {{ position }}
+          <VSpacer />
+          <VFadeTransition>
+            <VBtn
+              v-if="(isHovering || isExpanded) && !isReadonly && allowDeletion"
+              v-tooltip:bottom="{ text: 'Delete slide', openDelay: 300 }"
+              aria-label="Delete slide"
+              class="mr-2"
+              color="error"
+              density="comfortable"
+              icon="mdi-trash-can-outline"
+              size="small"
+              variant="tonal"
+              @click.stop="deleteItem"
+            />
+          </VFadeTransition>
+        </div>
+      </VExpansionPanelTitle>
     </VHover>
-    <VSheet class="text-center overflow-y-auto" color="transparent">
+    <VExpansionPanelText class="text-center">
       <VAlert
         v-if="!hasElements"
         class="mx-6 mt-4 mb-2"
-        color="primary-darken-1"
         icon="mdi-information-outline"
         variant="tonal"
         prominent
@@ -44,12 +53,11 @@
         :allowed-element-config="embedElementConfig"
         :container="{ embeds }"
         :is-readonly="isReadonly"
-        class="px-8 py-3"
         @delete="deleteEmbed"
         @save="saveEmbed($event.embeds)"
       />
-    </VSheet>
-  </VSheet>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <script lang="ts" setup>
@@ -73,6 +81,7 @@ interface Props {
   embeds?: Record<string, Embed>;
   isFocused?: boolean;
   isReadonly?: boolean;
+  isExpanded?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -112,3 +121,9 @@ const deleteEmbed = (embed: { id: string }) => {
   emit('save', { item, embeds });
 };
 </script>
+
+<style lang="scss" scoped>
+.carousel-drag-handle {
+  cursor: pointer;
+}
+</style>
