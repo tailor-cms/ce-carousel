@@ -2,6 +2,13 @@
   "name": "@tailor-cms/ce-carousel-display",
   "description": "Tailor CMS carousel end-user component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-carousel.git",
+    "directory": "packages/display"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-carousel#readme",
+  "bugs": "https://github.com/tailor-cms/ce-carousel/issues",
   "type": "module",
   "version": "2.0.3",
   "exports": {
