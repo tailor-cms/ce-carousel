@@ -2,6 +2,7 @@
   "name": "@tailor-cms/ce-carousel-display",
   "description": "Tailor CMS carousel end-user component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailor-cms/ce-carousel.git",
