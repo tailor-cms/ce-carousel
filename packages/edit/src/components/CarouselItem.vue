@@ -5,7 +5,7 @@
       <VExpansionPanelTitle
         v-bind="hoverProps"
         class="pa-2 pr-4"
-        min-height="56"
+        min-height="50"
       >
         <div class="d-flex align-center w-100 ga-2">
           <span
@@ -15,7 +15,7 @@
           >
             <VIcon icon="mdi-drag-vertical" />
           </span>
-          Slide {{ position }}
+          <span :class="{ 'ml-3': isReadonly }">Slide {{ position }}</span>
           <VSpacer />
           <VFadeTransition>
             <VBtn
@@ -26,8 +26,9 @@
               color="error"
               density="comfortable"
               icon="mdi-trash-can-outline"
+              rounded="lg"
               size="small"
-              variant="tonal"
+              variant="text"
               @click.stop="deleteItem"
             />
           </VFadeTransition>
@@ -125,5 +126,9 @@ const deleteEmbed = (embed: { id: string }) => {
 <style lang="scss" scoped>
 .carousel-drag-handle {
   cursor: pointer;
+}
+
+:deep(.v-btn) {
+  --v-hover-opacity: 0.12;
 }
 </style>
