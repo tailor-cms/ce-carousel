@@ -37,15 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  cloneDeep,
-  isEqual,
-  isNumber,
-  pick,
-  pull,
-  reduce,
-  sortBy,
-} from 'lodash-es';
+import { cloneDeep, isEqual, pick, pull, reduce, sortBy } from 'lodash-es';
 import { computed, inject, reactive, ref, watch } from 'vue';
 import type { Element, ElementData } from '@tailor-cms/ce-carousel-manifest';
 import { useDraggable } from 'vue-draggable-plus';
@@ -70,7 +62,13 @@ const expanded = ref<string[]>([]);
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const panels = ref();
 
-const slides = computed(() => sortBy(elementData.items, 'position'));
+const slides = computed({
+  get: () => sortBy(elementData.items, 'position'),
+  set: (reordered) => {
+    reordered.forEach(({ id }, i) => (elementData.items[id].position = i + 1));
+    emit('save', elementData);
+  },
+});
 const slideCount = computed(() => slides.value.length);
 const embedsByItem = computed(() =>
   reduce(
@@ -108,27 +106,9 @@ const addSlide = () => {
   emit('save', elementData);
 };
 
-const calculateNewPosition = (oldIndex: number, newIndex: number) => {
-  if (!newIndex) return slides.value[newIndex].position / 2;
-  if (newIndex + 1 === slideCount.value) {
-    return slides.value[newIndex].position + 1;
-  }
-  const direction = oldIndex > newIndex ? -1 : 1;
-  const prevPos = slides.value[newIndex].position;
-  const nextPos = slides.value[newIndex + direction].position;
-  return (nextPos + prevPos) / 2;
-};
-
-useDraggable(panels, {
+useDraggable(panels, slides, {
   animation: 150,
   handle: '.carousel-drag-handle',
-  onUpdate: ({ oldIndex, newIndex }) => {
-    if (!isNumber(newIndex) || !isNumber(oldIndex)) return;
-    const position = calculateNewPosition(oldIndex, newIndex);
-    const currentItem = slides.value[oldIndex];
-    Object.assign(elementData.items[currentItem.id], { position });
-    emit('save', elementData);
-  },
 });
 
 watch(
