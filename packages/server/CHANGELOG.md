@@ -1,5 +1,13 @@
 # @tailor-cms/ce-carousel-server
 
+## 2.1.1
+
+### Patch Changes
+
+- Cleanup draggable handler.█
+- Updated dependencies
+  - @tailor-cms/ce-carousel-manifest@2.1.1
+
 ## 2.1.0
 
 ### Minor Changes
